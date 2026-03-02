@@ -54,7 +54,7 @@ const SlotManagement = () => {
     const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
 
     const handleDateClick = (date) => {
-        setSelectedDateStr(formatDate(date));
+        setSelectedDateStr(format(date, 'yyyy-MM-dd'));
         setFormData({ start_time: '', end_time: '' });
     };
 
@@ -296,6 +296,15 @@ const SlotManagement = () => {
         }
     };
 
+    const formatDisplayDate = (dateVal) => {
+        if (!dateVal) return "";
+        const date = new Date(dateVal);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
     return (
         <div className="container-fluid px-4 fade-in">
             <div className="mb-4">
@@ -340,7 +349,7 @@ const SlotManagement = () => {
                             </h5>
                             {selectedDateStr && (
                                 <span className="badge bg-primary-navy fw-normal px-3 py-2 rounded-pill">
-                                    {selectedDateStr}
+                                    {formatDisplayDate(selectedDateStr)}
                                 </span>
                             )}
                         </div>

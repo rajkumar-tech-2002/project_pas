@@ -167,7 +167,7 @@ const UserDashboard = () => {
                       </td>
                       <td className="text-muted small">
                         {app.status === "Completed" &&
-                        app.actual_duration_seconds > 0 ? (
+                          app.actual_duration_seconds > 0 ? (
                           <span className="fw-bold text-dark">
                             {Math.floor(app.actual_duration_seconds / 60)}m{" "}
                             {app.actual_duration_seconds % 60}s

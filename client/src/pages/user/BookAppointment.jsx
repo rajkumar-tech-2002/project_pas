@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   ChevronLeft,
   ChevronRight,
@@ -197,16 +198,7 @@ const BookAppointment = () => {
                         className="text-primary-navy me-3"
                       />
                       <span className="fw-bold fs-5">
-                        {(() => {
-                          const date = new Date(selectedDate);
-                          const day = String(date.getDate()).padStart(2, "0");
-                          const month = String(date.getMonth() + 1).padStart(
-                            2,
-                            "0",
-                          );
-                          const year = date.getFullYear();
-                          return `${day}-${month}-${year}`;
-                        })()}
+                        {selectedDate && format(new Date(selectedDate), "dd-MM-yyyy")}
                       </span>
                     </div>
                   </div>
@@ -232,7 +224,7 @@ const BookAppointment = () => {
                             new Date(
                               `2000-01-01T${selectedTimeRange.start_time}`,
                             )) /
-                            60000,
+                          60000,
                         )}
                       </div>
                     </div>

@@ -152,6 +152,15 @@ const AvailabilityManagement = () => {
         return days;
     };
 
+    const formatDisplayDate = (dateVal) => {
+        if (!dateVal) return "";
+        const date = new Date(dateVal);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
+
     const calendarDays = generateCalendarDays();
 
     return (
@@ -224,7 +233,9 @@ const AvailabilityManagement = () => {
                             <div>
                                 <h6 className="fw-bold text-white mb-0">Management</h6>
                                 {selectedDate && (
-                                    <p className="extra-small mb-0 opacity-75">{selectedDate}</p>
+                                    <p className="extra-small mb-0 opacity-75">
+                                        {formatDisplayDate(selectedDate)}
+                                    </p>
                                 )}
                             </div>
                             {selectedDate && !showForm && (

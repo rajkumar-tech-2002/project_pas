@@ -1,6 +1,12 @@
 import db from '../db.js';
 import { createNotification } from './notificationController.js';
 
+const formatDateDMY = (dateStr) => {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    return `${day}-${month}-${year}`;
+};
+
 export const getAllAppointments = async (req, res) => {
     try {
         const [rows] = await db.execute('SELECT * FROM appointments ORDER BY date DESC, start_time ASC');
@@ -47,7 +53,7 @@ export const saveAppointment = async (req, res) => {
         await createNotification(
             user_id,
             'Admin',
-            `New appointment booked by ${nameToStore} for ${date} at ${start_time}`,
+            `New appointment booked by ${nameToStore} for ${formatDateDMY(date)} at ${start_time}`,
             'APPOINTMENT_BOOKED',
             result.insertId
         );
@@ -69,7 +75,7 @@ export const updateStatus = async (req, res) => {
             await createNotification(
                 appointment[0].user_id,
                 appointment[0].role,
-                `Your appointment on ${appointment[0].date} at ${appointment[0].start_time} updated to ${status}`,
+                `Your appointment on ${formatDateDMY(appointment[0].date)} at ${appointment[0].start_time} updated to ${status}`,
                 'STATUS_CHANGED',
                 req.params.id
             );

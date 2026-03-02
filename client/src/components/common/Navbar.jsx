@@ -44,7 +44,7 @@ const Navbar = ({ onToggleSidebar }) => {
         if (!user) return;
         try {
             const data = await notificationService.getNotifications(user.username, user.role);
-            
+
             if (data && Array.isArray(data)) {
                 setNotifications(data);
                 const unread = data.filter(n => n && !n.is_read).length;
@@ -210,7 +210,7 @@ const Navbar = ({ onToggleSidebar }) => {
                                                 onClick={() => handleMarkAsRead(notif.id)}
                                             >
                                                 <div className="message">{notif.message}</div>
-                                                <div className="time">{new Date(notif.created_at).toLocaleString()}</div>
+                                                <div className="time">{notif.formatted_date || new Date(notif.created_at).toLocaleString()}</div>
                                             </div>
                                         ))
                                     )}

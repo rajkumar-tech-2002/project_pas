@@ -47,11 +47,11 @@ const Reports = () => {
             staff: data.filter((a) => a.role === "Staff").length,
             completionRate: Math.round(
               (data.filter((a) => a.status === "Completed").length / total) *
-                100,
+              100,
             ),
             cancellationRate: Math.round(
               (data.filter((a) => a.status === "Cancelled").length / total) *
-                100,
+              100,
             ),
           });
         } else {
