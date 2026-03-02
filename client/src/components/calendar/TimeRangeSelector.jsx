@@ -48,7 +48,7 @@ const TimeRangeSelector = ({ date, availableRanges = [], availabilityWindows = [
                 setValidationMessage({ type: 'success', text: `Duration: ${formatDuration(durationMins)}` });
                 onSelectRange({ start_time: startTime, end_time: endTime, duration: durationMins });
             } else {
-                setValidationMessage({ type: 'error', text: 'The selected time is unavailable. Please choose another slot.' });
+                setValidationMessage({ type: 'error', text: 'The selected time is Scheduled. Please choose another slot.' });
                 onSelectRange(null);
             }
         } else {
