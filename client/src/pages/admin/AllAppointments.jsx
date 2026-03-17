@@ -94,7 +94,7 @@ const AllAppointments = () => {
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-header bg-white border-0 p-4 pb-0">
                             <h5 className="fw-bold fs-6 mb-0">
-                                {selectedDateStr ? `Appointments for ${selectedDateStr}` : 'Select a date'}
+                                {selectedDateStr ? `Appointments for ${format(new Date(selectedDateStr), 'dd-MM-yyyy')}` : 'Select a date'}
                             </h5>
                         </div>
                         <div className="card-body p-4">

@@ -294,10 +294,10 @@ export const getStrategicInsights = async () => {
 export const startMeeting = async (id) => {
     try {
         await api.patch(`/appointments/${id}/start`);
-        return true;
+        return { success: true };
     } catch (error) {
         console.error('Error starting meeting:', error);
-        return false;
+        return { success: false };
     }
 };
 

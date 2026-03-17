@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAppointmentById, rescheduleAppointment, getAvailableTimeRanges } from '../../services/appointmentService';
-import { formatDate } from '../../utils/dateUtils';
+import { formatDate, format } from '../../utils/dateUtils';
 import TimeRangeSelector from '../../components/calendar/TimeRangeSelector';
 import { User, Calendar, ArrowLeft, Clock } from 'lucide-react';
 import { toast } from 'sonner';
@@ -116,7 +116,7 @@ const RescheduleAppointment = () => {
                                 <div className="mb-3 border-bottom pb-3">
                                     <div className="d-flex align-items-center text-muted mb-2">
                                         <Calendar size={18} className="me-2 text-primary" />
-                                        <span className="fw-medium">{formatDate(new Date(appointment.date))}</span>
+                                        <span className="fw-medium">{format(new Date(appointment.date), 'dd-MM-yyyy')}</span>
                                     </div>
                                     <div className="d-flex align-items-center text-muted">
                                         <Clock size={18} className="me-2 text-primary" />

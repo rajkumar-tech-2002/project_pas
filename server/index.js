@@ -28,6 +28,14 @@ app.get('/health', (req, res) => {
     res.json({ status: 'OK', message: 'PAS Server is running' });
 });
 
+// Force no-cache on ALL API responses — prevents IIS/proxy from serving stale data
+app.use('/api', (req, res, next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    next();
+});
+
 // Routes
 app.use('/api/availability', availabilityRoutes);
 app.use('/api/appointments', appointmentRoutes);
@@ -45,3 +53,5 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
+
+console.log("Node started at:", new Date().toISOString());

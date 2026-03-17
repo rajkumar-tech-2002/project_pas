@@ -136,7 +136,7 @@ const MyAppointments = () => {
                         </td>
                         <td>
                           {app.status === "Completed" &&
-                          app.actual_duration_seconds > 0 ? (
+                            app.actual_duration_seconds > 0 ? (
                             <span className="badge bg-light text-dark fw-normal">
                               {Math.floor(app.actual_duration_seconds / 60)}m{" "}
                               {app.actual_duration_seconds % 60}s
