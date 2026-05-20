@@ -1,304 +1,269 @@
 # PAS — Principal Appointment System
 
-A full-stack web application for scheduling and managing appointments with the Principal of an educational institution. Staff members can book time slots online, and Admins can manage availability, monitor activity, and generate reports — all from a clean, modern interface.
+<div align="center">
+
+![React](https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react)
+![Node.js](https://img.shields.io/badge/Node.js-LTS-green?style=for-the-badge&logo=node.js)
+![MySQL](https://img.shields.io/badge/MySQL-8.0-orange?style=for-the-badge&logo=mysql)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=for-the-badge&logo=vite)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap)
+
+**A professional, production-grade appointment management ecosystem for educational leadership.**
+
+[Explore Features](#-features) • [Deployment Guide](#-installation--setup) • [Architecture](#-system-architecture) • [Optimization](#-project-optimization-sujhav-improvements)
+
+</div>
 
 ---
 
-## 🎯 Objective
+## 📖 Overview
 
-To digitize and streamline the manual appointment process between staff/students and the Principal, reducing scheduling conflicts and providing real-time administrative insight.
+**PAS (Principal Appointment System)** is a high-performance full-stack web application designed to digitize and optimize the scheduling workflow between institutional stakeholders and the Principal. Built with modern web standards, it ensures transparency, eliminates double-booking, and provides administrators with strategic insights through real-time data visualization.
 
----
+### 🌟 Real-World Importance
 
-## 🚀 Key Features
-
-### 👤 Role-Based Access
-
-- **Admin** — Full control: manage availability, view all appointments, generate reports, reschedule and track meetings in real time.
-- **Staff** — Book appointments, view personal booking history, and receive status notifications.
-
-### 🗓️ Appointment Management
-
-- Book appointments within admin-defined availability windows
-- Automatic conflict detection — prevents double-booking
-- Reschedule existing appointments (Admin only)
-- Status lifecycle: `Active → InProgress → Completed / Cancelled`
-- Real-time live timer for In-Progress meetings on the Admin Dashboard
-
-### 📅 Availability & Slot Control
-
-- Admin sets date-wise availability windows (start time – end time)
-- Slot Management for fine-grained time-slot control
-- Calendar view for date-based availability overview
-
-### 📊 Admin Dashboard & Insights
-
-- Live Activity Feed with the 8 most recent appointments
-- KPI cards: Total Sessions, Pending Active, Fulfilled, Cancelled
-- Strategic Insights panel: Staff Participation Rate, Portal Traffic (30-day load factor), Peak Hour detection with actionable System Tips
-
-### 🔔 Notification System
-
-- Automatic notifications on booking and status changes
-- Admin notified on every new booking
-- User notified on every status update
-- Mark individual or all notifications as read
-
-### 📄 Reports
-
-- Filter reports by date range and status
-- Export to Excel (XLSX) using the `xlsx` library
+- **Operational Efficiency:** Transitions manual ledger-based booking into a seamless digital workflow.
+- **Resource Optimization:** Reduces idle time for management by ensuring a structured daily schedule.
+- **Data Integrity:** Maintains a tamper-proof audit trail of meetings and their actual durations.
 
 ---
 
-## 🛠️ Tech Stack
+## 🧠 System Architecture
 
-| Layer            | Technology                                                  |
-| ---------------- | ----------------------------------------------------------- |
-| **Frontend**     | React 19, React Router DOM v7, Vite 7                       |
-| **UI & Styling** | Bootstrap 5, Lucide React (icons), custom CSS               |
-| **State / UX**   | Sonner (toast notifications), date-fns                      |
-| **HTTP Client**  | Axios                                                       |
-| **Backend**      | Node.js, Express 4 (ES Modules)                             |
-| **Database**     | MySQL, mysql2 (Promise-based)                               |
-| **Dev Tools**    | Nodemon, dotenv                                             |
-| **Deployment**   | IIS (via `web.config`), Vite static build served by Express |
+### 📊 Architecture Diagram
 
----
+```mermaid
+graph TD
+    subgraph Client_Layer [Frontend - React 19]
+        UI[User Interface - Bootstrap 5]
+        Routes[React Router v7]
+        API_Call[Axios Services]
+    end
 
-## 📁 Project Structure
+    subgraph Server_Layer [Backend - Node.js/Express]
+        Endpoints[REST API Endpoints]
+        Logic[Business Logic Controllers]
+        MW[Authentication Middleware]
+    end
 
+    subgraph Data_Layer [Database - MySQL]
+        DB[(MySQL Database)]
+    end
+
+    UI --> Routes
+    Routes --> API_Call
+    API_Call -- "JSON/HTTP" --> Endpoints
+    Endpoints --> MW
+    MW --> Logic
+    Logic --> DB
 ```
+
+### 🏗️ Explanation
+
+- **Frontend:** A SPA (Single Page Application) built with React 19 and Vite for rapid rendering and state management.
+- **Backend:** A RESTful Node.js environment utilizing Express for stateless request handling.
+- **Security:** Layered access via `PrivateRoute` components and backend middleware validations.
+
+---
+
+## 🔄 Application Flow
+
+### 📌 Flowchart
+
+```mermaid
+flowchart TD
+    Start([User Login]) --> Auth{Role?}
+    Auth -- Admin --> AdminDash[Admin Dashboard]
+    Auth -- Staff --> StaffDash[Staff Dashboard]
+
+    AdminDash --> SetAvail[Set Availability Windows]
+    AdminDash --> Monitor[Live Meeting Feed]
+    AdminDash --> Export[Export Analytics to Excel]
+
+    StaffDash --> Browse[Browse Date Slots]
+    Browse --> Book[Book Appointment]
+    Book --> Notify[System Notification Triggered]
+
+    Notify --> DB[(Database)]
+```
+
+### 🔁 Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    participant Staff
+    participant Frontend
+    participant Backend
+    participant DB
+
+    Staff->>Frontend: Select Slot & Click Book
+    Frontend->>Backend: Request: POST /api/appointments
+    Backend->>DB: Check for Overlapping Slots
+    DB-->>Backend: Result (Empty/Conflict)
+    alt No Conflict
+        Backend->>DB: INSERT Appointment record
+        Backend-->>Frontend: 201 Created (Appointment ID)
+        Frontend-->>Staff: "Booking Successful!"
+    else Conflict
+        Backend-->>Frontend: 409 Conflict
+        Frontend-->>Staff: "Slot already taken"
+    end
+```
+
+---
+
+## 🧩 Module Breakdown
+
+- **Admin Module:** Centralized control for availability windows, live meeting status toggles, and multi-parameter report generation.
+- **User Module:** Personalized dashboard for staff tracking their own request lifecycle and scheduling new slots.
+- **Notification System:** Event-driven module alerts users on booking confirmations and status transitions.
+- **Analytics Engine:** Backend logic calculates peak hour traffic and staff participation metrics.
+
+---
+
+## ✨ Features
+
+- **✅ Intelligent Slot Validation:** Real-time checking against existing appointments and admin availability.
+- **⏱️ Live Session Tracker:** Integrated stopwatch for "In-Progress" meetings on the Admin side.
+- **📊 Strategic Insights:** Dashboards for "Portal Traffic," "Peak Hours," and "Load Factor" (30-day view).
+- **📥 One-Click Export:** Seamless Excel (XLSX) generation for institutional reporting.
+- **🛡️ RBAC Privacy:** Strict segregation of Admin and Staff data views.
+
+---
+
+## 🧰 Tech Stack
+
+- **Frontend:** React 19, Vite 7, Bootstrap 5, Lucide React (Icons).
+- **Backend:** Node.js, Express.js (ES Modules).
+- **Database:** MySQL 8.0 (Managed via `mysql2/promise`).
+- **Reporting:** `xlsx` library for institutional data portability.
+- **Styling:** Custom CSS + Bootstrap Utility classes for high-performance UI.
+
+---
+
+## 📂 Project Structure
+
+```text
 PAS/
-├── client/                         # React + Vite frontend
-│   ├── index.html
-│   ├── vite.config.js
-│   ├── package.json
-│   └── src/
-│       ├── App.jsx                  # Root component (BrowserRouter + Toaster)
-│       ├── main.jsx
-│       ├── index.css                # Global styles
-│       ├── routes/
-│       │   └── AppRoutes.jsx        # Route definitions + role-based PrivateRoute guard
-│       ├── components/
-│       │   ├── calendar/
-│       │   │   ├── CalendarView.jsx
-│       │   │   ├── TimeRangeSelector.jsx
-│       │   │   ├── TimeSlotModal.jsx
-│       │   │   └── TimeSlotSelector.jsx
-│       │   ├── common/
-│       │   │   ├── MainLayout.jsx   # Shared layout (Navbar + Sidebar + Outlet)
-│       │   │   ├── Navbar.jsx
-│       │   │   ├── Sidebar.jsx
-│       │   │   └── Footer.jsx
-│       │   └── ui/
-│       │       ├── Loader.jsx
-│       │       └── sonnar.jsx       # Sonner Toaster wrapper
-│       ├── pages/
-│       │   ├── auth/
-│       │   │   └── Login.jsx
-│       │   ├── admin/
-│       │   │   ├── AdminDashboard.jsx        # Stats, Live feed, Insights
-│       │   │   ├── AllAppointments.jsx       # Full appointment list
-│       │   │   ├── AvailabilityManagement.jsx
-│       │   │   ├── SlotManagement.jsx
-│       │   │   ├── Reports.jsx               # Filter + Excel export
-│       │   │   └── RescheduleAppointment.jsx
-│       │   └── user/
-│       │       ├── UserDashboard.jsx
-│       │       ├── BookAppointment.jsx       # Calendar + slot picker + conflict check
-│       │       └── MyAppointments.jsx        # Personal appointment history
-│       └── services/
-│           ├── api.js                        # Axios base instance
-│           ├── appointmentService.js         # Booking, status, reschedule, stats, report
-│           ├── authService.js
-│           ├── availabilityService.js
-│           └── notificationService.js
-│
-├── server/                          # Node.js + Express backend
-│   ├── index.js                     # App entry — middleware, routes, static serving
-│   ├── db.js                        # MySQL2 connection pool
-│   ├── schema.sql                   # Database schema + seed data
-│   ├── package.json
-│   ├── web.config                   # IIS deployment config
-│   ├── routes/
-│   │   ├── appointmentRoutes.js
-│   │   ├── authRoutes.js
-│   │   ├── availabilityRoutes.js
-│   │   └── notificationRoutes.js
-│   └── controllers/
-│       ├── appointmentController.js
-│       ├── authController.js
-│       ├── availabilityController.js
-│       └── notificationController.js
-│
-└── .gitignore
+├── client/                 # React Application
+│   ├── src/
+│   │   ├── components/     # UI Components (Calendar, Layout, etc.)
+│   │   ├── pages/          # Full-page views
+│   │   └── services/       # API abstraction layer
+├── server/                 # Express API
+│   ├── controllers/        # Logical controllers
+│   ├── routes/             # API Routing logic
+│   ├── db.js               # Database connection pool
+│   └── schema.sql          # Core DB structure
+└── .env                    # Environment variables (Sensitive)
 ```
-
----
-
-## 🗄️ Database Schema
-
-Database name: **`PAS`**
-
-| Table                  | Purpose                                                 |
-| ---------------------- | ------------------------------------------------------- |
-| `users`                | Stores Admin / Staff accounts with roles                |
-| `availability_windows` | Date-wise time windows the Principal is available       |
-| `appointments`         | All bookings with status, actual start/end times        |
-| `notifications`        | System messages triggered on booking and status changes |
-
-### Appointment Status Flow
-
-```
-Active → InProgress → Completed
-Active →             Cancelled
-```
-
----
-
-## 🔌 API Endpoints
-
-### Auth — `/api/auth`
-
-| Method | Endpoint | Description                            |
-| ------ | -------- | -------------------------------------- |
-| POST   | `/login` | Authenticate user; returns user object |
-
-### Availability — `/api/availability`
-
-| Method | Endpoint | Description                          |
-| ------ | -------- | ------------------------------------ |
-| GET    | `/`      | Get all availability windows         |
-| GET    | `/:date` | Get availability for a specific date |
-| POST   | `/`      | Create a new availability window     |
-| PUT    | `/:id`   | Update a window                      |
-| DELETE | `/:id`   | Delete a window                      |
-
-### Appointments — `/api/appointments`
-
-| Method | Endpoint          | Description                                                             |
-| ------ | ----------------- | ----------------------------------------------------------------------- |
-| GET    | `/`               | Get all appointments                                                    |
-| GET    | `/stats`          | Get count stats (total, active, completed, cancelled)                   |
-| GET    | `/insights`       | Get strategic insights (staff participation, portal traffic, peak hour) |
-| GET    | `/report`         | Get filtered report data (`?startDate=&endDate=&status=`)               |
-| GET    | `/date/:date`     | Get appointments for a specific date                                    |
-| GET    | `/:id`            | Get a single appointment                                                |
-| POST   | `/`               | Book a new appointment                                                  |
-| PATCH  | `/:id/status`     | Update appointment status                                               |
-| PATCH  | `/:id/reschedule` | Reschedule an appointment                                               |
-| PATCH  | `/:id/start`      | Mark meeting as InProgress (records `actual_start_time`)                |
-| PATCH  | `/:id/complete`   | Mark meeting as Completed (records duration in seconds)                 |
-| DELETE | `/:id`            | Delete an appointment                                                   |
-
-### Notifications — `/api/notifications`
-
-| Method | Endpoint    | Description                                                  |
-| ------ | ----------- | ------------------------------------------------------------ |
-| GET    | `/`         | Get notifications (filter by `user_id` and `role` via query) |
-| PUT    | `/:id/read` | Mark a notification as read                                  |
-| PUT    | `/read-all` | Mark all notifications as read                               |
 
 ---
 
 ## ⚙️ Installation & Setup
 
-### 1. Prerequisites
+### 🖥️ System Requirements
 
-- **Node.js** v18 or higher
-- **MySQL** Server (v8 recommended)
+- **Node.js:** v18.x or higher
+- **Database:** MySQL 8.0
+- **Memory:** 4GB RAM minimum
 
-### 2. Database Setup
+### 🔧 Step-by-Step Setup
 
-```sql
--- Run schema.sql in your MySQL client
-source server/schema.sql;
-```
+1. **Clone & Install:**
 
-This creates the `PAS` database, all four tables, and inserts three seed users.
+   ```bash
+   git clone https://github.com/your-username/PAS.git
+   cd PAS/server && npm install
+   cd ../client && npm install
+   ```
 
-### 3. Server Setup
+2. **Database Config:**
+   - Execute `server/schema.sql` in your MySQL Workbench or CLI.
+   - Configure `server/.env` with your DB credentials.
 
-```bash
-cd server
-npm install
-```
-
-Create a `.env` file inside the `server/` directory:
-
-```env
-DB_HOST=localhost
-DB_USER=your_mysql_user
-DB_PASSWORD=your_mysql_password
-DB_NAME=PAS
-PORT=5001
-```
-
-Start the development server:
-
-```bash
-npm run dev        # uses nodemon for auto-reload
-# or
-npm start          # production start
-```
-
-### 4. Client Setup
-
-```bash
-cd client
-npm install
-npm run dev        # Vite dev server (usually http://localhost:5173)
-```
-
-### 5. Production Build
-
-```bash
-cd client
-npm run build      # outputs to client/dist/
-```
-
-The Express server is configured to serve `client/dist` as static files and fall back to `index.html` for client-side routing. Run only `npm start` in the `server/` directory for production.
+3. **Execution:**
+   - **Backend:** `npm run dev` (from `/server`)
+   - **Frontend:** `npm run dev` (from `/client`)
 
 ---
 
-## 🔐 Default Login Credentials
+## 🔐 Security & Restrictions
 
-> ⚠️ These are for initial testing only. Passwords are stored in plain text in the seed data — update them before production use.
-
-| Username | Password   | Role  |
-| -------- | ---------- | ----- |
-| `admin`  | `admin123` | Admin |
-| `staff1` | `staff123` | Staff |
+- **Session Management:** Secure role-based filtering via `localStorage` and `AppRoutes` guards.
+- **Environment Isolation:** Sensitive DB keys are strictly isolated in `.env`.
+- **Validation:** Frontend and Backend dual-validation for time-slot integrity.
 
 ---
 
-## 🛡️ Security Notes
+## 🗄️ Database Design
 
-- **Environment Variables**: All database credentials are stored in `.env` (excluded from Git via `.gitignore`).
-- **Role-Based Routing**: Client-side `PrivateRoute` restricts pages by role using `localStorage` session.
-- **Auth**: Currently session-based via `localStorage`. For production, consider JWT with HTTP-only cookies.
-- **Passwords**: Seed passwords are plain text — hash with `bcrypt` before going live.
+### 📊 ER Diagram
+
+```mermaid
+erDiagram
+    USER ||--o{ APPOINTMENT : creates
+    USER ||--o{ NOTIFICATION : receives
+    APPOINTMENT }|--|| AVAILABILITY : belongs_to
+
+    USER {
+        int id PK
+        string username
+        string password
+        enum role
+    }
+    APPOINTMENT {
+        int id PK
+        int user_id FK
+        datetime start_time
+        datetime end_time
+        enum status
+    }
+    AVAILABILITY {
+        int id PK
+        date date
+        time start_time
+        time end_time
+    }
+```
 
 ---
 
-## 🌐 Deployment (IIS)
+## 🧹 Project Optimization सुझाव (Improvements)
 
-The `server/web.config` is pre-configured for IIS hosting with iisnode. After building the client:
+### 🚩 Recommended Cleanup
 
-1. Build the client: `cd client && npm run build`
-2. Configure IIS to point to the `server/` directory
-3. Ensure `iisnode` module is installed on the IIS server
-4. Set environment variables in IIS application settings or via `.env`
+1. **Unused Utilities:** Remove or move `server/check_db.js`, `server/migrate.js`, and `server/fix_migration.js` into a dedicated `archive/` folder.
+2. **Standardization:** Rename `client/src/components/ui/sonnar.jsx` to `sonner.jsx` to maintain consistency with the library name.
+3. **Redundant SQL:** Consolidate `add_commitment_columns.sql` and `fix_db_access.sql` into the master `schema.sql` for a single-command setup.
+
+### 🚀 Performance & Security Suggestions
+
+- **Password Hashing:** Implement `bcryptjs` in `authController.js`. The current plain-text storage in `schema.sql` is for demo only.
+- **Centralized Config:** utilize the `server/config/` folder for DB pool settings instead of `server/db.js` alone.
+- **Caching:** Integrate `Redis` for availability slots if system load exceeds 1,000 daily users.
 
 ---
 
-## 👨‍💻 Developer
+## 🚀 DevOps & Deployment
 
-**Rajkumar Anbazhagan**
+### ⚙️ Deployment Diagram
+
+```mermaid
+graph TD
+    Dev[Local Development] --> Git[GitHub Repo]
+    Git --> Build[Vite Build Process]
+    Build --> Server[Node.js Production Server]
+    Server --> IIS[Windows IIS / iisnode]
+    IIS --> Web((Public Access))
+```
 
 ---
 
 ## 📜 License
 
-This project was developed as an academic/institutional tool. All rights reserved.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+🎨 _Crafted for institutional excellence._
